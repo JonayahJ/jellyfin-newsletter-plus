@@ -123,7 +123,7 @@ def send_newsletter():
             logging.info(f"Folder {item['Name']} is watched for TV series.")
         else:
             # Check subfolders for nested library support (e.g. star-trek/movies, star-trek/tv)
-            subfolders, _ = JellyfinAPI.get_item_from_parent(parent_id=item["Id"], type="folder", minimum_creation_date=dt.datetime(1900, 1, 1))
+            subfolders = JellyfinAPI.get_subfolders(parent_id=item["Id"])
             logging.info(f"Checking subfolders of {item['Name']}: found {len(subfolders)} subfolders: {[s['Name'] for s in subfolders]}")
             matched = False
             for subfolder in subfolders:
