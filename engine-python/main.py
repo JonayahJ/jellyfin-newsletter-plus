@@ -115,14 +115,28 @@ def send_newsletter():
         if "Name" not in item:
             logging.warning(f"Item {item} has no Name. Skipping.")
             continue
-        if item["Name"] in configuration.conf.jellyfin.watched_film_folders :
-           watched_film_folders_id.append(item["Id"])
-           logging.info(f"Folder {item['Name']} is watched for films.")
-        elif item["Name"] in configuration.conf.jellyfin.watched_tv_folders :
+        if item["Name"] in configuration.conf.jellyfin.watched_film_folders:
+            watched_film_folders_id.append(item["Id"])
+            logging.info(f"Folder {item['Name']} is watched for films.")
+        elif item["Name"] in configuration.conf.jellyfin.watched_tv_folders:
             watched_tv_folders_id.append(item["Id"])
             logging.info(f"Folder {item['Name']} is watched for TV series.")
         else:
-            logging.warning(f"Folder {item['Name']} is not watched. Skipping. Add \"{item['Name']}\" in your watched folder to include it.")
+            # Check subfolders for nested library support (e.g. star-trek/movies, star-trek/tv)
+            subfolders, _ = JellyfinAPI.get_item_from_parent(parent_id=item["Id"], type="folder", minimum_creation_date=dt.datetime(1900, 1, 1))
+            matched = False
+            for subfolder in subfolders:
+                subfolder_path = f"{item['Name']}/{subfolder['Name']}"
+                if subfolder_path in configuration.conf.jellyfin.watched_film_folders:
+                    watched_film_folders_id.append(subfolder["Id"])
+                    logging.info(f"Subfolder {subfolder_path} is watched for films.")
+                    matched = True
+                elif subfolder_path in configuration.conf.jellyfin.watched_tv_folders:
+                    watched_tv_folders_id.append(subfolder["Id"])
+                    logging.info(f"Subfolder {subfolder_path} is watched for TV series.")
+                    matched = True
+            if not matched:
+                logging.warning(f"Folder {item['Name']} is not watched. Skipping. Add \"{item['Name']}\" in your watched folder to include it.")
 
     total_movie = 0
     total_tv = 0
