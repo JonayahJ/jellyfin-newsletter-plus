@@ -13,6 +13,17 @@ def get_root_items():
         raise Exception(f"Error while getting the root items, status code: {response.status_code}. Answer: {response.text}.")
     return response.json()["Items"]
 
+# Finding subfolders via API
+def get_subfolders(parent_id):
+    headers = {
+        "Authorization": f'MediaBrowser Token="{conf.jellyfin.api_token}"'
+    }
+    response = requests.get(f'{conf.jellyfin.url}/Items?ParentId={parent_id}&Recursive=false', headers=headers)
+    if response.status_code != 200:
+        logging.error(f"Error while getting subfolders, status code: {response.status_code}.")
+        return []
+    return response.json()["Items"]
+
 
 def get_item_from_parent(parent_id, type, minimum_creation_date=None):
     if type not in ["movie", "tv"]:
