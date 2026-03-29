@@ -1,26 +1,30 @@
-# Jellyfin Newsletter - keep your users updated
+# Jellyfin Newsletter Plus - the same newsletter with better access to subfolders
 
 <p align="center">
-<img src="https://github.com/SeaweedbrainCY/jellyfin-newsletter/actions/workflows/build_and_deploy.yml/badge.svg?branch="/>
- <img src="https://img.shields.io/github/license/seaweedbraincy/jellyfin-newsletter"/>
-<img src="https://img.shields.io/github/v/release/seaweedbraincy/jellyfin-newsletter"/>
+<img src="https://github.com/JonayahJ/jellyfin-newsletter-plus/actions/workflows/build_fork.yml/badge.svg?branch="/>
+ <img src="https://img.shields.io/github/license/jonayahj/jellyfin-newsletter-plus"/>
+<!-- <img src="https://img.shields.io/github/v/release/jonayahj/jellyfin-newsletter-plus"/> -->
 </p>
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/assets/jellyfin_newsletter.png" width=100>
 </p>
 
-A newsletter for Jellyfin to notify your users of your latest additions. Jellyfin Newsletter connects to the Jellyfin API to retrieve recently added items and send them to your users. 
+A newsletter for Jellyfin to notify your users of your latest additions. Jellyfin Newsletter connects to the Jellyfin API to retrieve recently added items and send them to your users. Jellyfin Newsletter Plus goes one step beyond and allows you to name subfolders of libraries, in case you have a more complicated Jellyfin infrastructure.
 
 It is fully customizable and can be run on a schedule using a cron job or a task scheduler.
 
 > [!important]
-> **This project engine is under heavy rewrite, from python to GO.**
+> **This project is forked from its [original creator](https://github.com/SeaweedbrainCY/jellyfin-newsletter), and he is updating the engine from Python to GO.  This forked project only uses the Python engine.**
 >
-> The python version is the stable reference and is still maintained.
-> The GO version is in development. The GO version will be more efficient, easier to maintain and extend, and will have a better architecture.
+> The Python version is the stable reference and is still maintained. This is the engine that the Jellyfin Newsletter Plus extended.
+> The GO version is in development. It will be more efficient, easier to maintain and extend, and will have a better architecture. However, it is not what this forked project uses at the time.
+> Whenever the GO version is stable, I will review the new code to see if my nested subfolders feature is even necessary.  If it is, I'll make that update here as well.  Until then, use Python.
 >
-> See the [reasons and implication of the rewrite](https://github.com/SeaweedbrainCY/jellyfin-newsletter/discussions/103) for more details.
+> See the [reasons and implications of the rewrite from the original creator](https://github.com/SeaweedbrainCY/jellyfin-newsletter/discussions/103) for more details.
+
+## What's different in this fork
+This fork adds nested subfolder support for Jellyfin libraries, allowing you to watch subfolders like `star-trek/movies` and `star-trek/tv` separately within a parent folder.
 
 ## Table of Contents
 1. [What it looks like](#what-it-looks-like)
@@ -40,12 +44,13 @@ It is fully customizable and can be run on a schedule using a cron job or a task
 
 ## Features
 - Retrieve the last added movies and TV shows from your Jellyfin server
+- **NEW:** Retrieve movies and series from nested Jellyfin libraries.
 - Send a newsletter to your users with the last added items
 - Retrieve the movie details from TMDB, including poster
 - Group TV shows by seasons
 - Fully customizable and responsive email template
-- Easy to maintain, extend, setup and run
-- Support for English, French, Spanish, Catalan, Italian and Hebrew (RTL-aware template)
+- Easy to maintain, extend, set up, and run
+- Support for English, French, Spanish, Catalan, Italian, and Hebrew (RTL-aware template)
 - Configure the list of recipients
 - Configure specific folders to watch for new items
 - Support themes 
@@ -63,16 +68,16 @@ Currently available themes:
 ### Requirements
 
 - Docker 
-- Jellyfin API key - [How to generate an API key](https://github.com/SeaweedbrainCY/jellyfin-newsletter?tab=readme-ov-file#how-to-generate-a-jellyfin-api-key)
-- A TMDB API key (free) - [How to generate a TMDB API key](https://github.com/SeaweedbrainCY/jellyfin-newsletter?tab=readme-ov-file#how-to-generate-a-tmdb-api-key)
-- A SMTP server 
+- Jellyfin API key - [How to generate an API key](https://github.com/JonayahJ/jellyfin-newsletter-plus?tab=readme-ov-file#how-to-generate-a-jellyfin-api-key)
+- A TMDB API key (free) - [How to generate a TMDB API key](https://github.com/JonayahJ/jellyfin-newsletter-plus?tab=readme-ov-file#how-to-generate-a-tmdb-api-key)
+- An SMTP server 
 
 ### Configuration with built-in cron job
 This is the default and recommended way to run the newsletter. The Docker container will run on a schedule using a built-in cron job. It will run on the schedule defined in the `config/config.yml` file.
 
-1. Download the [docker-compose.yml](https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/docker-compose.yml) file:
+1. Download the [docker-compose.yml](https://raw.githubusercontent.com/JonayahJ/jellyfin-newsletter-plus/refs/heads/main/docker-compose.yml) file:
 ```bash 
-curl -o docker-compose.yml https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/docker-compose.yml
+curl -o docker-compose.yml https://raw.githubusercontent.com/JonayahJ/jellyfin-newsletter-plus/refs/heads/main/docker-compose.yml
 ```
 
 2. (optional) Edit the `docker-compose.yml` file to change the default user or timezone.
@@ -82,9 +87,9 @@ curl -o docker-compose.yml https://raw.githubusercontent.com/SeaweedbrainCY/jell
 mkdir config
 ```
 
-4. Download the [config file](https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/config/config-example.yml) in the `config` folder:
+4. Download the [config file](https://raw.githubusercontent.com/JonayahJ/jellyfin-newsletter-plus/refs/heads/main/config/config-example.yml) in the `config` folder:
 ```
-curl -o config/config.yml https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/config/config-example.yml
+curl -o config/config.yml https://raw.githubusercontent.com/JonayahJ/jellyfin-newsletter-plus/refs/heads/main/config/config-example.yml
 ```
 
 5. Edit the `config/config.yml` file and fill in the required fields. **All non-commented fields are required.**
@@ -95,7 +100,7 @@ docker compose up -d
 ```
 
 > [!note]
-> Note: It is recommended to use a static version instead of `latest`, and manually upgrade. [Last version](https://github.com/SeaweedbrainCY/jellyfin-newsletter/releases)
+> Note: It is recommended to use a static version instead of `latest`, and manually upgrade. [Last version](https://github.com/JonayahJ/jellyfin-newsletter-plus/releases)
 
 
 ### Configuration with external cron job
@@ -106,9 +111,9 @@ Use this method if you want to run the script on a schedule using an external cr
 mkdir config
 ```
 
-2. Download the [config file](https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/config/config-example.yml) in the `config` folder:
+2. Download the [config file](https://raw.githubusercontent.com/JonayahJ/jellyfin-newsletter-plus/refs/heads/main/config/config-example.yml) in the `config` folder:
 ```
-curl -o config/config.yml https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/config/config-example.yml
+curl -o config/config.yml https://raw.githubusercontent.com/JonayahJ/jellyfin-newsletter-plus/refs/heads/main/config/config-example.yml
 ```
 
 2. Edit the `config/config.yml` file and fill in the required fields. **All non-commented fields are required.**
@@ -118,22 +123,18 @@ curl -o config/config.yml https://raw.githubusercontent.com/SeaweedbrainCY/jelly
 ```bash
 docker run --rm \
     -v ./config:/app/config \
-    ghcr.io/seaweedbraincy/jellyfin-newsletter:v0.10.2
+    ghcr.io/jonayahj/jellyfin-newsletter-plus:latest
 ```
 > [!note]
-> Note: It is recommended to use a static version instead of `latest`, and manually upgrade. [Last version](https://github.com/SeaweedbrainCY/jellyfin-newsletter/releases)
+> Note: It is recommended to use a static version instead of `latest`, and manually upgrade. [Last version](https://github.com/JonayahJ/jellyfin-newsletter-plus/releases)
 
 4. Schedule the script to run on a regular basis. 
 ```bash
 # Unix :
 crontab -e
 # Add the following line to run the script every 1st of the month at 8am
-0 8 1 * * root docker run --rm -v PATH_TO_CONFIG_FOLDER/config:/app/config/ ghcr.io/seaweedbraincy/jellyfin-newsletter:v0.10.2
+0 8 1 * * root docker run --rm -v PATH_TO_CONFIG_FOLDER/config:/app/config/ ghcr.io/jonayahj/jellyfin-newsletter-plus:latest
 ```
-
-
-
-
 
 ## Current limitations
 - Email template translations are available for English, French, and Hebrew
